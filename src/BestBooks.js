@@ -34,31 +34,28 @@ class BestBooks extends React.Component {
   /* TODO: Make a GET request to your API to fetch all the books from the database  */
 
   render() {
-
-    /* TODO: render all the books in a Carousel */
-
     return (
       <>
-
         <h2>My Essential Lifelong Learning &amp; Formation Shelf</h2>
-
-        {this.state.books > 0 && this.state.books.map((val, idx) => (
+  
+        {this.state.books.length > 0 && (
           <Carousel>
-            <Carousel.Item>
-              <img
-                className="d-block w-100"
-                src="holder.js/800x400?text=First slide&bg=373940"
-                alt="Empty no books"
-              />
-              <Carousel.Caption>
-                <h3>{idx}</h3>
-                <p>{val.title}</p>
-              </Carousel.Caption>
-            </Carousel.Item>
+            {this.state.books.map((book, idx) => (
+              <Carousel.Item key={idx}>
+                <img
+                  className="d-block w-100"
+                  src={book.image} 
+                  alt="Book cover"
+                />
+                <p>{book.author}</p> 
+                <Carousel.Caption>
+                  <h3>{book.title}</h3> 
+                  <p>{book.description}</p>
+                </Carousel.Caption>
+              </Carousel.Item>
+            ))}
           </Carousel>
-        ))}
-
-
+        )}
       </>
     );
   }
