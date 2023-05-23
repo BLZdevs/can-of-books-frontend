@@ -17,12 +17,13 @@ class BestBooks extends React.Component {
 
   async pullBooks() {
     try {
-      const response = await axios.get('http://localhost:3001/books');
+      const response = await axios.get(`${process.env.REACT_APP_SERVER}/getBooks`);
       if (this.state.books === 0) {
         console.log("messed up");
       }
       else {
-        this.setState({ books: response.data });
+        console.log(response.data);
+        this.setState({ books: response.data});
       }
     }
     catch (err) {
@@ -41,7 +42,7 @@ class BestBooks extends React.Component {
 
         <h2>My Essential Lifelong Learning &amp; Formation Shelf</h2>
 
-        {this.state.books.length > 0 && this.state.books.map((val, idx) => (
+        {this.state.books > 0 && this.state.books.map((val, idx) => (
           <Carousel>
             <Carousel.Item>
               <img
@@ -51,7 +52,7 @@ class BestBooks extends React.Component {
               />
               <Carousel.Caption>
                 <h3>{idx}</h3>
-                <p>{val.name}</p>
+                <p>{val.title}</p>
               </Carousel.Caption>
             </Carousel.Item>
           </Carousel>
