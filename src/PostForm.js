@@ -8,7 +8,7 @@ class PostForm extends React.Component {
     const newBook = {
       title: e.target.title.value,
       description: e.target.description.value,
-      series: e.target.series.value,
+      series: e.target.series.checked,
       status: e.target.status.value,
       author: e.target.author.value
     };
@@ -20,7 +20,7 @@ class PostForm extends React.Component {
     return (
       <Container>
 
-        <Form onsubmit={this.handleSubmit}>
+        <Form onSubmit={this.handleSubmit}>
           <Form.Group controlId="title">
             <Form.Label>Title</Form.Label>
             <Form.Control type="text" placeholder="What is the name of your book?" />
