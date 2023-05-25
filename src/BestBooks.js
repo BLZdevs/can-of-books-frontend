@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 import Carousel from 'react-bootstrap/Carousel';
+import bookImage from './library.jpg';
 
 
 class BestBooks extends React.Component {
@@ -44,7 +45,7 @@ class BestBooks extends React.Component {
               <Carousel.Item key={idx}>
                 <img
                   className="d-block w-100"
-                  src={book.image} 
+                  src={bookImage} 
                   alt="Book cover"
                 />
                 <p>{book.author}</p> 
