@@ -4,7 +4,6 @@ import Carousel from 'react-bootstrap/Carousel';
 import musashi from './musashi.jpg';
 import love from './love.jpg';
 import presence from './presence.jpg';
-
 import PostForm from './PostForm';
 import './BestBook.css';
 
