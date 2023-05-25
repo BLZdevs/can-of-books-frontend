@@ -4,6 +4,7 @@ import Carousel from 'react-bootstrap/Carousel';
 import musashi from './musashi.jpg';
 import love from './love.jpg';
 import presence from './presence.jpg';
+import defaultImg from './library.jpg'
 import PostForm from './PostForm';
 import './BestBook.css';
 
@@ -12,7 +13,8 @@ class BestBooks extends React.Component {
     super(props);
     this.state = {
       books: [],
-      bookImage: [musashi, love, presence]
+      bookImage: [musashi, love, presence],
+      defaultImg: defaultImg
     };
   }
 
@@ -61,7 +63,7 @@ class BestBooks extends React.Component {
                 <img
                   className="d-block w-100"
                   id='coverPhoto'
-                  src={this.state.bookImage[idx % this.state.bookImage.length]}
+                  src={idx < 3 ? this.state.bookImage[idx] : this.state.defaultImg}
                   alt={book.title}
                 />
                 <Carousel.Caption>

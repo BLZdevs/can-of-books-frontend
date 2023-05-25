@@ -18,10 +18,8 @@ class Profile extends Component {
       description = {element.description}
       title = {element.title}
       student = {element}
-      // addHeart = {this.props.addHeart}
-      // changes = {this.props.changes}
       />)
-      /* TODO: render information about the developers */
+  
       return(
         <>
         <h2>About Us</h2>
