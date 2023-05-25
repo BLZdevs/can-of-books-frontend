@@ -54,8 +54,8 @@ class BestBooks extends React.Component {
   render() {
     return (
       <>
-        <h2>My Essential Lifelong Learning &amp; Formation Shelf</h2>
-        <PostForm postBooks={this.postBooks} />
+        <h2 className='head'>My Essential Lifelong Learning &amp; Formation Shelf</h2>
+
         {this.state.books.length > 0 && (
           <Carousel>
             {this.state.books.map((book, idx) => (
@@ -75,6 +75,7 @@ class BestBooks extends React.Component {
             ))}
           </Carousel>
         )}
+         <PostForm postBooks={this.postBooks} />
       </>
     );
   }

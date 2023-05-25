@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Container, Button } from 'react-bootstrap';
+import './BestBook.css'
 
 class PostForm extends React.Component {
   handleSubmit = (e) => {
@@ -18,7 +19,7 @@ class PostForm extends React.Component {
   render() {
 
     return (
-      <Container>
+      <Container className="form">
 
         <Form onSubmit={this.handleSubmit}>
           <Form.Group controlId="title">
