@@ -1,33 +1,34 @@
-import { Component } from "react";
+import React from "react";
+// import { Component } from "react";
 import { Card, Button, Col } from "react-bootstrap";
 
-class Us extends Component {
+class Us extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      like: 0,
-      dislike: 0,
+      likes: 0
     };
   }
-  addlike = () => {
+  addLike = () => {
+    console.log("Button clicked"); 
     this.setState({
-      like: this.state.like + 1,
+      likes: this.state.likes +1
     });
-    this.props.addHeart();
+    // this.props.addHeart();
   };
   render() {
     return (
       <Col>
-        <h2>About Us</h2>
-        <Card style={{ width: "18rem" }}>
-          <Card.Img variant="top" src="holder.js/100px180" />
+      
+        <Card style={{ width: "20 rem" }}>
+          <Card.Img variant="top" src={this.props.image} />
           <Card.Body>
-            <Card.Title>Card Title</Card.Title>
+            <Card.Title>{this.props.name}</Card.Title>
+             <strong> {this.props.title} </strong>
             <Card.Text>
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
+              {this.props.description}
             </Card.Text>
-            <Button variant="primary">Go somewhere</Button>
+            <Button variant="primary" onClick = {this.addLike}>Show Some Love! {this.state.likes}</Button>
           </Card.Body>
         </Card>
       </Col>

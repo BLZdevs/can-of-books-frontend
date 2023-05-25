@@ -1,26 +1,36 @@
+import React from "react";
+import Us from "./Us";
 import { Component } from "react";
-import { Card, Button } from "react-bootstrap";
+// import { Card, Button } from "react-bootstrap";
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import studentData from "./StudentData.json"
+
 
 class Profile extends Component {
 
   render() {
-    /* TODO: render information about the developers */
-    return (
-      <>
-    <h2>About Us</h2>
-    <Card style={{ width: '18rem' }}>
-    <Card.Img variant="top" src="holder.js/100px180" />
-    <Card.Body>
-      <Card.Title>Card Title</Card.Title>
-      <Card.Text>
-        Some quick example text to build on the card title and make up the
-        bulk of the card's content.
-      </Card.Text>
-      <Button variant="primary">Go somewhere</Button>
-    </Card.Body>
-  </Card>
-  </>
-    );
+    const students = studentData.map((element, idx) =>
+      <Us
+      key = {idx}
+      name = {element.name}
+      image = {element.image}
+      description = {element.description}
+      title = {element.title}
+      student = {element}
+      // addHeart = {this.props.addHeart}
+      // changes = {this.props.changes}
+      />)
+      /* TODO: render information about the developers */
+      return(
+        <>
+        <h2>About Us</h2>
+      <Container>
+      <Row> {students}
+      </Row>
+      </Container>
+      </>
+    )
   }
 }
 
