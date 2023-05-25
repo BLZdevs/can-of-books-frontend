@@ -1,7 +1,6 @@
 import React from 'react';
 import { Navbar, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import Profile from './About';
 
 class Header extends React.Component {
   render() {
@@ -15,7 +14,6 @@ class Header extends React.Component {
             <Nav.Link as={Link} to="/about" className="nav-link">About</Nav.Link>
           </Nav>
         </Navbar.Collapse>
-        <Profile />
       </Navbar>
     );
   }
