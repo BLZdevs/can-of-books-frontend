@@ -4,17 +4,16 @@ import Carousel from 'react-bootstrap/Carousel';
 import musashi from './musashi.jpg';
 import love from './love.jpg';
 import presence from './presence.jpg';
-import defaultImg from './library.jpg'
 import PostForm from './PostForm';
 import './BestBook.css';
+import { Button } from 'react-bootstrap';
 
 class BestBooks extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       books: [],
-      bookImage: [musashi, love, presence],
-      defaultImg: defaultImg
+      bookImage: [musashi, love, presence]
     };
   }
 
@@ -49,13 +48,25 @@ class BestBooks extends React.Component {
     }
   };
 
+  deleteBooks = async (bookToDelete) => {
+    try {
+      const url = `${process.env.REACT_APP_SERVER}/getBooks/${bookToDelete._id}`;
+      await axios.delete(url);
+      const updatedBooks = this.state.books.filter(element => element._id !== bookToDelete._id);
+      this.setState({books:updatedBooks});
+    }
+    catch (err) {
+      console.error(err);
+    }
+  }
+
   /* TODO: Make a GET request to your API to fetch all the books from the database  */
 
   render() {
     return (
       <>
-        <h2 className='head'>My Essential Lifelong Learning &amp; Formation Shelf</h2>
-
+        <h2>My Essential Lifelong Learning &amp; Formation Shelf</h2>
+        <PostForm postBooks={this.postBooks} />
         {this.state.books.length > 0 && (
           <Carousel>
             {this.state.books.map((book, idx) => (
@@ -63,7 +74,7 @@ class BestBooks extends React.Component {
                 <img
                   className="d-block w-100"
                   id='coverPhoto'
-                  src={idx < 3 ? this.state.bookImage[idx] : this.state.defaultImg}
+                  src={this.state.bookImage[idx % this.state.bookImage.length]}
                   alt={book.title}
                 />
                 <Carousel.Caption>
@@ -73,9 +84,9 @@ class BestBooks extends React.Component {
                 </Carousel.Caption>
               </Carousel.Item>
             ))}
+            {/* <Button></Button> */}
           </Carousel>
         )}
-         <PostForm postBooks={this.postBooks} />
       </>
     );
   }
