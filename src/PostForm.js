@@ -1,8 +1,9 @@
 import React from 'react';
-import { Form, Container, Button } from 'react-bootstrap';
+import { Form, Container, Button, Modal } from 'react-bootstrap';
 import './BestBook.css'
 
 class PostForm extends React.Component {
+
   handleSubmit = (e) => {
     e.preventDefault();
 
@@ -13,14 +14,17 @@ class PostForm extends React.Component {
       status: e.target.status.value,
       author: e.target.author.value
     };
-
     this.props.postBooks(newBook);
+
+    this.props.hideModal();
   };
   render() {
 
     return (
+      <Modal show={this.props.showModal} onHide={this.props.hideModal}>
+        <Modal.Header closeButton></Modal.Header>
       <Container className="form">
-
+      
         <Form onSubmit={this.handleSubmit}>
           <Form.Group controlId="title">
             <Form.Label>Title</Form.Label>
@@ -48,7 +52,7 @@ class PostForm extends React.Component {
         </Form>
 
       </Container>
-
+      </Modal>
     );
   }
 }
