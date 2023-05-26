@@ -15,7 +15,8 @@ class BestBooks extends React.Component {
     this.state = {
       books: [],
       bookImage: [musashi, love, presence],
-      defaultImg: defaultImg
+      defaultImg: defaultImg,
+      showModal: false
     };
   }
 
@@ -64,13 +65,21 @@ class BestBooks extends React.Component {
     }
   };
 
+  handleOpen = () =>{
+    this.setState({showModal:true})
+  }
+
+  handleClose = () =>{
+    this.setState({showModal:false})
+  }
+
   /* TODO: Make a GET request to your API to fetch all the books from the database  */
 
   render() {
     return (
       <>
         <h2 className='head'>My Essential Lifelong Learning &amp; Formation Shelf</h2>
-
+        <Button variant="secondary" onClick={this.handleOpen}> Open</Button>
         {this.state.books.length > 0 && (
           <Carousel>
             {this.state.books.map((book, idx) => (
@@ -91,7 +100,7 @@ class BestBooks extends React.Component {
             ))}
           </Carousel>
         )}
-         <PostForm postBooks={this.postBooks} />
+         <PostForm postBooks={this.postBooks} showModal = {this.state.showModal} hideModal = {this.handleClose} />
       </>
     );
   }
