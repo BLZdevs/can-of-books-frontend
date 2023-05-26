@@ -74,7 +74,7 @@ class BestBooks extends React.Component {
                 <img
                   className="d-block w-100"
                   id='coverPhoto'
-                  src={this.state.bookImage[idx % this.state.bookImage.length]}
+                  src={idx < 3 ? this.state.bookImage[idx] : this.state.defaultImg}
                   alt={book.title}
                 />
                 <Carousel.Caption>
