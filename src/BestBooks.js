@@ -51,12 +51,13 @@ class BestBooks extends React.Component {
   };
 
   deleteBooks = async (bookToDelete) => {
+    console.log('inside the delete function');
+    console.log(bookToDelete);
     try {
       const url = `${process.env.REACT_APP_SERVER}/getBooks/${bookToDelete._id}`;
       await axios.delete(url);
       const updatedBooks = this.state.books.filter(element => element._id !== bookToDelete._id);
       this.setState({books:updatedBooks});
-      console.log(updatedBooks);
     }
     catch (err) {
       console.error(err);
@@ -68,8 +69,8 @@ class BestBooks extends React.Component {
   render() {
     return (
       <>
-        <h2>My Essential Lifelong Learning &amp; Formation Shelf</h2>
-        <PostForm postBooks={this.postBooks} />
+        <h2 className='head'>My Essential Lifelong Learning &amp; Formation Shelf</h2>
+
         {this.state.books.length > 0 && (
           <Carousel>
             {this.state.books.map((book, idx) => (
@@ -84,15 +85,18 @@ class BestBooks extends React.Component {
                   <h3>{book.title}</h3>
                   <p>By {book.author}</p>
                   <p>{book.description}</p>
+                <Button onClick={()=>this.deleteBooks(book)}>Delete</Button>
                 </Carousel.Caption>
               </Carousel.Item>
             ))}
           </Carousel>
         )}
-    <Button onSubmit={this.deleteBooks}>Delete</Button>
+         <PostForm postBooks={this.postBooks} />
       </>
     );
   }
 }
+
+
 
 export default BestBooks;
