@@ -7,6 +7,7 @@ import presence from './presence.jpg';
 import defaultImg from './library.jpg'
 import PostForm from './PostForm';
 import './BestBook.css';
+import { Button } from 'react-bootstrap';
 
 class BestBooks extends React.Component {
   constructor(props) {
@@ -49,6 +50,20 @@ class BestBooks extends React.Component {
     }
   };
 
+  deleteBooks = async (bookToDelete) => {
+    console.log('inside the delete function');
+    console.log(bookToDelete);
+    try {
+      const url = `${process.env.REACT_APP_SERVER}/getBooks/${bookToDelete._id}`;
+      await axios.delete(url);
+      const updatedBooks = this.state.books.filter(element => element._id !== bookToDelete._id);
+      this.setState({books:updatedBooks});
+    }
+    catch (err) {
+      console.error(err);
+    }
+  };
+
   /* TODO: Make a GET request to your API to fetch all the books from the database  */
 
   render() {
@@ -70,6 +85,7 @@ class BestBooks extends React.Component {
                   <h3>{book.title}</h3>
                   <p>By {book.author}</p>
                   <p>{book.description}</p>
+                <Button onClick={()=>this.deleteBooks(book)}>Delete</Button>
                 </Carousel.Caption>
               </Carousel.Item>
             ))}
@@ -80,5 +96,7 @@ class BestBooks extends React.Component {
     );
   }
 }
+
+
 
 export default BestBooks;
