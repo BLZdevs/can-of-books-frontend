@@ -54,11 +54,12 @@ class BestBooks extends React.Component {
       await axios.delete(url);
       const updatedBooks = this.state.books.filter(element => element._id !== bookToDelete._id);
       this.setState({books:updatedBooks});
+      console.log(updatedBooks);
     }
     catch (err) {
       console.error(err);
     }
-  }
+  };
 
   /* TODO: Make a GET request to your API to fetch all the books from the database  */
 
@@ -84,9 +85,9 @@ class BestBooks extends React.Component {
                 </Carousel.Caption>
               </Carousel.Item>
             ))}
-            {/* <Button></Button> */}
           </Carousel>
         )}
+    <Button onSubmit={this.deleteBooks}>Delete</Button>
       </>
     );
   }
