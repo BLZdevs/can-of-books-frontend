@@ -6,8 +6,11 @@ import love from './love.jpg';
 import presence from './presence.jpg';
 import defaultImg from './library.jpg'
 import PostForm from './PostForm';
+import UpdateForm from './UpdateForm';
 import './BestBook.css';
 import { Button } from 'react-bootstrap';
+
+
 
 class BestBooks extends React.Component {
   constructor(props) {
@@ -16,7 +19,9 @@ class BestBooks extends React.Component {
       books: [],
       bookImage: [musashi, love, presence],
       defaultImg: defaultImg,
-      showModal: false
+      showModal: false,
+      showModal2: false,
+      selectedBook: {}
     };
   }
 
@@ -65,12 +70,35 @@ class BestBooks extends React.Component {
     }
   };
 
+  updateBooks = async (bookToUpdate) => {
+    console.log(bookToUpdate);
+    try {
+      await axios.put(`${process.env.REACT_APP_SERVER}/getBooks/${bookToUpdate._id}`, bookToUpdate);
+      const updateBooksArray = this.state.books.map(val => val._id === bookToUpdate._id ? bookToUpdate : val);
+      this.setState({ books: updateBooksArray }, () => console.log(this.state.books));
+    }
+
+    catch (err) {
+      console.error(err);
+    }
+    
+  };
+
   handleOpen = () =>{
     this.setState({showModal:true})
   }
 
   handleClose = () =>{
     this.setState({showModal:false})
+  }
+
+  handleOpen2 = (book) =>{
+    console.log(book);
+    this.setState({showModal2:true, selectedBook: book})
+  }
+
+  handleClose2 = () =>{
+    this.setState({showModal2:false})
   }
 
   /* TODO: Make a GET request to your API to fetch all the books from the database  */
@@ -94,13 +122,16 @@ class BestBooks extends React.Component {
                   <h3>{book.title}</h3>
                   <p>By {book.author}</p>
                   <p>{book.description}</p>
-                <Button onClick={()=>this.deleteBooks(book)}>Delete</Button>
+                <Button variant="primary" onClick={()=>this.deleteBooks(book)}>Delete</Button>
+                <Button variant="secondary" onClick={()=>this.handleOpen2(book)}>Update</Button>
+                
                 </Carousel.Caption>
               </Carousel.Item>
             ))}
           </Carousel>
         )}
-         <PostForm postBooks={this.postBooks} showModal = {this.state.showModal} hideModal = {this.handleClose} />
+        <UpdateForm updateBooks={this.updateBooks} showModal2={this.state.showModal2} selectedBook={this.state.selectedBook} handleClose2 = {this.handleClose2}/>
+        <PostForm postBooks={this.postBooks} showModal = {this.state.showModal} hideModal = {this.handleClose} />
       </>
     );
   }
