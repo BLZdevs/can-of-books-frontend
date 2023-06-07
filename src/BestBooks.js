@@ -60,23 +60,25 @@ class BestBooks extends React.Component {
       .catch(err => console.error(err));
   }
 
-  deleteBooks = (bookToDelete) => {
-    // console.log('inside the delete function');
-    // console.log(bookToDelete);
+  deleteBooks = async (bookToDelete) => {
+    console.log('inside the delete function');
+    console.log(bookToDelete);
     const url = `${process.env.REACT_APP_SERVER}/getBooks/${bookToDelete._id}`;
     this.getJwt()
       .then(jwt => {
         const config = {
           headers: { 'Authorization': `Bearer ${jwt}` }
         }
-        return axios.delete(url, config)
+        const updatedBooks = axios.delete(url, config)
+        return updatedBooks
       })
       .then(updatedBooks => {
-        return this.state.books.filter(element => element._id !== bookToDelete._id)
-          .then(this.setState({ books: updatedBooks }))
-          .catch(err => console.error(err))
+        console.log(this.state.books);
+        const updatedBooksArr = this.state.books.filter(element => element._id !== bookToDelete._id)
+        this.setState({ books: updatedBooksArr })
       })
       .catch(err => console.error(err));
+    console.log(this.updateBooks)
   };
 
   updateBooks = (bookToUpdate) => {
@@ -88,9 +90,10 @@ class BestBooks extends React.Component {
         }
         return axios.put(`${process.env.REACT_APP_SERVER}/getBooks/${bookToUpdate._id}`, bookToUpdate, config)
       })
-      .then(updateBooksArray => {
-        this.state.books.map(val => val._id === bookToUpdate._id ? bookToUpdate : val)
-          .then(this.setState({ books: updateBooksArray }))
+      .then( bookToUpdate => {
+        console.log(bookToUpdate.data);
+       const updateBooksArr = this.state.books.map(val => val._id === bookToUpdate.data._id ? bookToUpdate.data : val)
+        this.setState({ books: updateBooksArr })
       })
       .catch(err => console.error(err))
   };
