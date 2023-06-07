@@ -11,7 +11,7 @@ import {
   Route
 } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import Welcome from './Welcome';
 
 class App extends React.Component {
   render() {
@@ -25,7 +25,7 @@ class App extends React.Component {
             
             <Route 
               exact path="/"
-              element={isAuthenticated && <BestBooks />}></Route>
+              element={isAuthenticated ? <BestBooks /> : <Welcome />}></Route>
             
             {/* PLACEHOLDER: add a route with a path of '/about' that renders the `About` component */}
             <Route
