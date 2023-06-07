@@ -72,8 +72,9 @@ class BestBooks extends React.Component {
         return axios.delete(url, config)
       })
       .then(updatedBooks => {
-        this.state.books.filter(element => element._id !== bookToDelete._id)
-        return this.setState({ books: updatedBooks })
+        return this.state.books.filter(element => element._id !== bookToDelete._id)
+          .then(this.setState({ books: updatedBooks }))
+          .catch(err => console.error(err))
       })
       .catch(err => console.error(err));
   };
