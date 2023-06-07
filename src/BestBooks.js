@@ -7,8 +7,9 @@ import presence from './presence.jpg';
 import defaultImg from './library.jpg'
 import PostForm from './PostForm';
 import UpdateForm from './UpdateForm';
-import './BestBook.css';
 import { Button } from 'react-bootstrap';
+import { withAuth0 } from '@auth0/auth0-react';
+import './BestBook.css';
 
 
 
@@ -29,76 +30,85 @@ class BestBooks extends React.Component {
     this.pullBooks();
   }
 
-  pullBooks = async () => {
-    try {
-      const response = await axios.get(`${process.env.REACT_APP_SERVER}/getBooks`);
-      if (this.state.books === 0) {
-        console.log("messed up");
-      }
-      else {
-        console.log(response.data);
-        this.setState({ books: response.data });
-      }
-    }
-    catch (err) {
-      console.error(err);
-    }
-    
+  getJwt = () => {
+    return this.props.auth0.getIdTokenClaims()
+      .then(res => res.__raw)
+      .catch(err => console.error(err))
+  }
+
+  pullBooks = () => {
+    this.getJwt()
+      .then(jwt => {
+        const config = {
+          headers: { 'Authorization': `Bearer ${jwt}` }
+        }
+        return axios.get(`${process.env.REACT_APP_SERVER}/getBooks`, config);
+      })
+      .then(response => this.setState({ books: response.data }))
+      .catch(err => console.error(err));
+  }
+
+  postBooks = (newBook) => {
+    this.getJwt()
+      .then(jwt => {
+        const config = {
+          headers: { 'Authorization': `Bearer ${jwt}` }
+        }
+        return axios.post(`${process.env.REACT_APP_SERVER}/getBooks`, newBook, config)
+      })
+      .then(response => this.setState({ books: [...this.state.books, response.data] }))
+      .catch(err => console.error(err));
+  }
+
+  deleteBooks = (bookToDelete) => {
+    // console.log('inside the delete function');
+    // console.log(bookToDelete);
+    const url = `${process.env.REACT_APP_SERVER}/getBooks/${bookToDelete._id}`;
+    this.getJwt()
+      .then(jwt => {
+        const config = {
+          headers: { 'Authorization': `Bearer ${jwt}` }
+        }
+        return axios.delete(url, config)
+      })
+      .then(updatedBooks => {
+        this.state.books.filter(element => element._id !== bookToDelete._id)
+        return this.setState({ books: updatedBooks })
+      })
+      .catch(err => console.error(err));
   };
 
-  postBooks = async (newBook) => {
-    try {
-      const response = await axios.post(`${process.env.REACT_APP_SERVER}/getBooks`, newBook);
-      this.setState({ books: [...this.state.books, response.data] }, () => console.log(this.state.books));
-    }
-    catch (err) {
-      console.error(err);
-    }
-  };
-
-  deleteBooks = async (bookToDelete) => {
-    console.log('inside the delete function');
-    console.log(bookToDelete);
-    try {
-      const url = `${process.env.REACT_APP_SERVER}/getBooks/${bookToDelete._id}`;
-      await axios.delete(url);
-      const updatedBooks = this.state.books.filter(element => element._id !== bookToDelete._id);
-      this.setState({books:updatedBooks});
-    }
-    catch (err) {
-      console.error(err);
-    }
-  };
-
-  updateBooks = async (bookToUpdate) => {
+  updateBooks = (bookToUpdate) => {
     console.log(bookToUpdate);
-    try {
-      await axios.put(`${process.env.REACT_APP_SERVER}/getBooks/${bookToUpdate._id}`, bookToUpdate);
-      const updateBooksArray = this.state.books.map(val => val._id === bookToUpdate._id ? bookToUpdate : val);
-      this.setState({ books: updateBooksArray }, () => console.log(this.state.books));
-    }
-
-    catch (err) {
-      console.error(err);
-    }
-    
+    this.getJwt()
+      .then(jwt => {
+        const config = {
+          headers: { 'Authorization': `Bearer ${jwt}` }
+        }
+        return axios.put(`${process.env.REACT_APP_SERVER}/getBooks/${bookToUpdate._id}`, bookToUpdate, config)
+      })
+      .then(updateBooksArray => {
+        this.state.books.map(val => val._id === bookToUpdate._id ? bookToUpdate : val)
+          .then(this.setState({ books: updateBooksArray }))
+      })
+      .catch(err => console.error(err))
   };
 
-  handleOpen = () =>{
-    this.setState({showModal:true})
+  handleOpen = () => {
+    this.setState({ showModal: true })
   }
 
-  handleClose = () =>{
-    this.setState({showModal:false})
+  handleClose = () => {
+    this.setState({ showModal: false })
   }
 
-  handleOpen2 = (book) =>{
+  handleOpen2 = (book) => {
     console.log(book);
-    this.setState({showModal2:true, selectedBook: book})
+    this.setState({ showModal2: true, selectedBook: book })
   }
 
-  handleClose2 = () =>{
-    this.setState({showModal2:false})
+  handleClose2 = () => {
+    this.setState({ showModal2: false })
   }
 
   /* TODO: Make a GET request to your API to fetch all the books from the database  */
@@ -122,16 +132,16 @@ class BestBooks extends React.Component {
                   <h3>{book.title}</h3>
                   <p>By {book.author}</p>
                   <p>{book.description}</p>
-                <Button variant="primary" onClick={()=>this.deleteBooks(book)}>Delete</Button>
-                <Button variant="secondary" onClick={()=>this.handleOpen2(book)}>Update</Button>
-                
+                  <Button variant="primary" onClick={() => this.deleteBooks(book)}>Delete</Button>
+                  <Button variant="secondary" onClick={() => this.handleOpen2(book)}>Update</Button>
+
                 </Carousel.Caption>
               </Carousel.Item>
             ))}
           </Carousel>
         )}
-        <UpdateForm updateBooks={this.updateBooks} showModal2={this.state.showModal2} selectedBook={this.state.selectedBook} handleClose2 = {this.handleClose2}/>
-        <PostForm postBooks={this.postBooks} showModal = {this.state.showModal} hideModal = {this.handleClose} />
+        <UpdateForm updateBooks={this.updateBooks} showModal2={this.state.showModal2} selectedBook={this.state.selectedBook} handleClose2={this.handleClose2} />
+        <PostForm postBooks={this.postBooks} showModal={this.state.showModal} hideModal={this.handleClose} />
       </>
     );
   }
@@ -139,4 +149,4 @@ class BestBooks extends React.Component {
 
 
 
-export default BestBooks;
+export default withAuth0(BestBooks);
